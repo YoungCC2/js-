@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        
+    </style>
+</head>
+<body>
+    <canvas id="cav" style="border: 1px solid #000000" width="500" height="500"></canvas>
+    <script type="application/javascript">
+        var canvas = document.getElementById("cav");
+        var ctx = canvas.getContext("2d");
+        var xPosint = 250,yPoint = 250;
+        ctx.strokeStyle = '#FF0000';
+        /*参照物*/
+        ctx.beginPath();
+        ctx.arc(250,250,50,0,2*Math.PI);
+        ctx.stroke();
+        /*中心点*/
+        ctx.strokeStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(xPosint,yPoint,1,0,2*Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = '#000000';
+     
+        
+//        
+        ctx.beginPath();
+        ctx.arc(250,250,130,0,2*Math.PI);
+        ctx.fill();
+        
+        var sAngle = 0;
+        function runLine(ctx,r,sAngle){
+            //r = 175;   //圆形半径
+            var shudu = (2*Math.PI / 360) *(sAngle);   //  360/8=45,即45度(这个随个人设置)
+            var sX = 250 + Math.sin(shudu) * r;    //  95 是圆形中心的坐标X   即定位left 的值
+            var sY = 250 - Math.cos(shudu) * r;    //  95 是圆形中心的坐标Y   即定位top 的值
+
+            var ehudu = (2*Math.PI / 360) *(180+sAngle);   //  360/8=45,即45度(这个随个人设置)
+            var eX = 250 + Math.sin(ehudu) * r;    //  95 是圆形中心的坐标X   即定位left 的值
+            var eY = 250 - Math.cos(ehudu) * r;    //  95 是圆形中心的坐标Y   即定位top 的值
+            sX = parseInt(sX); sY = parseInt(sY);
+            eX = parseInt(eX); eY = parseInt(eY);
+            return {
+                sX:sX,
+                sY:sY,
+                eX:eX,
+                eY:eY
+            }
+        }
+
+        
+        var t = setInterval(function(){
+            var pArr = runLine(ctx,175,sAngle);
+            var mc = runLine(ctx,178,sAngle+6);
+            var mcs = runLine(ctx,178,sAngle-6);
+            var sArr = runLine(ctx,50,sAngle-45);
+            var sdArr = runLine(ctx,50,sAngle+45);
+            
+            if(sAngle==360){
+                ctx.stroke();
+                clearInterval(t);
+            }else{
+                
+                ctx.moveTo(mc.sX,mc.sY);
+                ctx.lineTo(mcs.sX,mcs.sY);
+                
+            
+                ctx.moveTo(mc.sX,mc.sY);
+                ctx.lineTo(sdArr.sX,sdArr.sY);
+                
+                
+                ctx.moveTo(mcs.sX,mcs.sY);
+                ctx.lineTo(sArr.sX,sArr.sY);
+                
+            }
+            sAngle+=45;
+        },50);
+        
+        
+    </script>
+</body>
+</html>
